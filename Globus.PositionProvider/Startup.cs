@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Globus.PositionProvider.SelfData;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,27 +20,6 @@ namespace Globus.PositionProvider
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            SelfAircraft.Aircraft =
-                new Aircraft()
-                {
-                    CallSign = "King",
-                    TrueTrack = 37.2,
-                    Altitude = 2000,
-                    Position =
-                        new Position()
-                        { Lontitude = 34.82141, Latitude = 32.08374 }
-                };
-
-            new Thread(() =>
-                {
-                    while (true)
-                    {
-                        SelfAircraft.Aircraft.Position.Latitude =
-                            SelfAircraft.Aircraft.Position.Latitude + 0.0001;
-                        Thread.Sleep(33);
-                    }
-                }).Start();
         }
 
         public IConfiguration Configuration { get; }
