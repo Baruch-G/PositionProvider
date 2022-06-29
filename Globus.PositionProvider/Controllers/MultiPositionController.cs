@@ -29,7 +29,7 @@ namespace Globus.PositionProvider.Controllers
         {
             while (aircrafts.Count < count) {
                 var aircraft = new Aircraft();
-                AircraftSimulator.Simulate(aircraft);
+                aircraft.Simulate();
                 aircrafts.Add(aircraft);
             }
 

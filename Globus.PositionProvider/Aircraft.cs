@@ -1,5 +1,3 @@
-using System;
-
 namespace Globus.PositionProvider
 {
     public class Aircraft
@@ -15,7 +13,7 @@ namespace Globus.PositionProvider
 
     public class Position
     {
-        public double Lontitude { get; set; }
+        public double Longitude { get; set; }
 
         public double Latitude { get; set; }
     }

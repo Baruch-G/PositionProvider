@@ -21,7 +21,7 @@ namespace Globus.PositionProvider.Controllers
         public SelfPositionController(ILogger<SelfPositionController> logger)
         {
             _logger = logger;
-            AircraftSimulator.Simulate(aircraft);
+            aircraft.Simulate();
         }
 
         [HttpGet]
