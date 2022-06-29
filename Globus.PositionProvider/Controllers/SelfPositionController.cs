@@ -18,7 +18,7 @@ namespace Globus.PositionProvider.Controllers
             _logger = logger;
             if (aircraft == null) 
             {
-                aircraft = new Aircraft { CallSign = "SelfData", Position = new Position { Latitude = Randomizer.RandomDouble(31,35), Longitude = Randomizer.RandomDouble(31,35) }, TrueTrack = 0, Altitude = 0 };
+                aircraft = new Aircraft { CallSign = "SelfData", Position = new Position { Latitude = Randomizer.RandomDouble(34.4,35.6), Longitude = Randomizer.RandomDouble(30,33) }, TrueTrack = 0, Altitude = 0 };
                 aircraft.Simulate();
             }
             _logger.LogDebug("SelfPosition Created");
