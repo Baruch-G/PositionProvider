@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Globus.PositionProvider.Utils;
@@ -15,12 +12,15 @@ namespace Globus.PositionProvider.Controllers
     public class MultiPositionController : ControllerBase
     {
         private readonly ILogger<MultiPositionController> _logger;
-        private readonly List<Aircraft> aircrafts;
+        private static List<Aircraft> aircrafts;
 
         public MultiPositionController(ILogger<MultiPositionController> logger)
         {
             _logger = logger;
-            aircrafts = new List<Aircraft>();
+            if (aircrafts == null) 
+            {
+                aircrafts = new List<Aircraft>();
+            }
 
         }
 
@@ -28,8 +28,9 @@ namespace Globus.PositionProvider.Controllers
         public async Task<IEnumerable<Aircraft>> GetAsync(int count)
         {
             while (aircrafts.Count < count) {
-                var aircraft = new Aircraft();
+                var aircraft = new Aircraft { CallSign = $"AIRCRAFT #{aircrafts.Count}", Position = new Position { Latitude = Randomizer.RandomDouble(31,35), Longitude = Randomizer.RandomDouble(31,35) }, TrueTrack = 0, Altitude = 0 };
                 aircraft.Simulate();
+                _logger.LogDebug($"Simulating {aircraft.CallSign}");
                 aircrafts.Add(aircraft);
             }
 

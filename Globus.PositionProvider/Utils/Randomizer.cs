@@ -8,5 +8,10 @@ namespace Globus.PositionProvider.Utils
         {
             return new Random().NextDouble() * (maximum - minimum) + minimum;
         }
+
+        public static int RandomInt(int minimum, int maximum)
+        {
+            return new Random().Next(minimum, maximum+1);
+        }
     }
 }

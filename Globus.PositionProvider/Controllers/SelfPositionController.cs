@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Globus.PositionProvider.Utils;
@@ -21,13 +16,19 @@ namespace Globus.PositionProvider.Controllers
         public SelfPositionController(ILogger<SelfPositionController> logger)
         {
             _logger = logger;
-            aircraft.Simulate();
+            if (aircraft == null) 
+            {
+                aircraft = new Aircraft { CallSign = "SelfData", Position = new Position { Latitude = Randomizer.RandomDouble(31,35), Longitude = Randomizer.RandomDouble(31,35) }, TrueTrack = 0, Altitude = 0 };
+                aircraft.Simulate();
+            }
+            _logger.LogDebug("SelfPosition Created");
         }
 
         [HttpGet]
         public async Task<ActionResult<Aircraft>> Get()
         {
-            return Ok(aircraft);
+            _logger.LogDebug("GET Request for SelfPosition");
+            return (aircraft.Position != null) ? Ok(aircraft) : BadRequest();
         }
     }
 }
