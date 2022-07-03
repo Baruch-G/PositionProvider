@@ -1,0 +1,8 @@
+# docker run -p 3650:3650 maptiler/server
+
+services: 
+  maptiler:
+    image: maptiler/server
+    container_name: maptiler
+    ports:
+      - 3650:3650
