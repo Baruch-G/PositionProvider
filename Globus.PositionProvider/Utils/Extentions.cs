@@ -16,8 +16,6 @@ namespace Globus.PositionProvider.Utils
 
         private static void Simulate(Aircraft aircraft, int knot)
         {
-            Console.WriteLine("Starting Simulation");
-
             aircraft.TrueTrack = 0;
             aircraft.Altitude = 0;
             var sendInterval = 0.1;
@@ -37,7 +35,7 @@ namespace Globus.PositionProvider.Utils
                 {
                     aircraft.TrueTrack =
                         (
-                        aircraft.TrueTrack + Randomizer.RandomDouble(0, 0.01)
+                        aircraft.TrueTrack + Randomizer.RandomDouble(0, 0.08)
                         ) %
                         360;
                     aircraft.Altitude += (int)(sendInterval * 10);
