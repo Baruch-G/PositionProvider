@@ -58,7 +58,8 @@ namespace Globus.PositionProvider.Controllers
             _logger.LogDebug($"Simulating {aircraft.CallSign}");
             aircrafts.Add (aircraft);
             aircrafts.Remove (aircraft);
-            return Ok(DateTime.Now - start);
+            var result = DateTime.Now - start;
+            return Ok(new WdTime {ticks = result.Ticks, milliseconds = result.Milliseconds});
         }
     }
 }
