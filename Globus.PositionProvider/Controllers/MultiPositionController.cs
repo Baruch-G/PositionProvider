@@ -29,19 +29,8 @@ namespace Globus.PositionProvider.Controllers
         public async Task<ActionResult<IEnumerable<Aircraft>>>
         GetAsync(int count)
         {
-            while (aircrafts.Count < count)
-            {
-                var aircraft =
-                    new Aircraft {
-                        CallSign = $"AIRCRAFT #{aircrafts.Count}",
-                        Position =
-                            new Position {
-                                Longitude = Randomizer.RandomDouble(34.4, 35.6),
-                                Latitude = Randomizer.RandomDouble(30, 33)
-                            },
-                        TrueTrack = 0,
-                        Altitude = 0
-                    };
+            while (aircrafts.Count <= count) {
+                var aircraft = new Aircraft { CallSign = $"AIRCRAFT #{aircrafts.Count}", Position = new Position { Latitude = Randomizer.RandomDouble(34.4,35.6), Longitude = Randomizer.RandomDouble(30,33) }, TrueTrack = 0, Altitude = 0 };
                 aircraft.Simulate();
                 _logger.LogDebug($"Simulating {aircraft.CallSign}");
                 aircrafts.Add (aircraft);
