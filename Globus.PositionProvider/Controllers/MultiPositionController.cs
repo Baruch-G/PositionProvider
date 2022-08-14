@@ -25,6 +25,13 @@ namespace Globus.PositionProvider.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Aircraft>>>
+        GetAsync()
+        {
+            return Ok(aircrafts);
+        }
+
         [HttpGet("{count}")]
         public async Task<ActionResult<IEnumerable<Aircraft>>>
         GetAsync(int count)
@@ -39,27 +46,32 @@ namespace Globus.PositionProvider.Controllers
             return (count != 0) ? Ok(aircrafts.Take(count)) : BadRequest();
         }
 
-        [HttpGet("create-delete")]
-        public async Task<ActionResult<TimeSpan>> GetAsync()
+        [HttpGet("count")]
+        public async Task<ActionResult<int>>
+        GetCountAsync()
+        {
+            return Ok(aircrafts.Count);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TimeSpan>> PostAsync(Aircraft aircraft)
         {
             var start = DateTime.Now;
-            var aircraft =
-                new Aircraft {
-                    CallSign = $"AIRCRAFT #{aircrafts.Count}",
-                    Position =
-                        new Position {
-                            Longitude = Randomizer.RandomDouble(34.4, 35.6),
-                            Latitude = Randomizer.RandomDouble(30, 33)
-                        },
-                    TrueTrack = 0,
-                    Altitude = 0
-                };
             aircraft.Simulate();
+            System.Console.WriteLine($"Simulating {aircraft.CallSign}");
             _logger.LogDebug($"Simulating {aircraft.CallSign}");
             aircrafts.Add (aircraft);
-            aircrafts.Remove (aircraft);
             var result = DateTime.Now - start;
             return Ok(new WdTime {ticks = result.Ticks, milliseconds = result.Milliseconds});
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAsync(Aircraft aircraft)
+        {
+            var result = aircrafts.Remove(aircraft);
+            return result ? Ok(aircraft.CallSign) : NotFound();
+        }
+
+        
     }
 }
