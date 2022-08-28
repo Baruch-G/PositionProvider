@@ -1,6 +1,7 @@
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Globus.PositionProvider.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ namespace Globus.PositionProvider.Controllers
 
         private static List<Aircraft> aircrafts;
 
+        private static bool isFetching;
+
         public MultiPositionController(ILogger<MultiPositionController> logger)
         {
             _logger = logger;
@@ -26,8 +29,7 @@ namespace Globus.PositionProvider.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Aircraft>>>
-        GetAsync()
+        public async Task<ActionResult<IEnumerable<Aircraft>>> GetAsync()
         {
             return Ok(aircrafts);
         }
@@ -53,25 +55,32 @@ namespace Globus.PositionProvider.Controllers
             return Ok(aircrafts.Count);
         }
 
+        //Obsolete, but may be used for testing
         [HttpPost]
-        public async Task<ActionResult<TimeSpan>> PostAsync(Aircraft aircraft)
-        {
-            var start = DateTime.Now;
-            aircraft.Simulate();
-            System.Console.WriteLine($"Simulating {aircraft.CallSign}");
-            _logger.LogDebug($"Simulating {aircraft.CallSign}");
-            aircrafts.Add (aircraft);
-            var result = DateTime.Now - start;
-            return Ok(new WdTime {ticks = result.Ticks, milliseconds = result.Milliseconds});
+        public async Task<ActionResult<long>> PostVerifyAsync(Aircraft aircraft){
+            aircrafts.Add(aircraft);
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            isFetching = true;
+            while (isFetching) 
+            {
+                Thread.Sleep(1);
+            }
+            stopWatch.Stop();
+            return Ok(stopWatch.ElapsedMilliseconds);
         }
 
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync(Aircraft aircraft)
         {
-            var result = aircrafts.Remove(aircraft);
-            return result ? Ok(aircraft.CallSign) : NotFound();
+            var count = aircrafts.RemoveAll(x => x.CallSign == aircraft.CallSign && x.Position.Latitude == aircraft.Position.Latitude && x.Position.Longitude == aircraft.Position.Longitude);
+            if (count > 0) {
+                isFetching = false;
+                return Ok(aircraft.CallSign);
+            }
+            else {
+                return NotFound();
+            }
         }
-
-        
     }
 }
