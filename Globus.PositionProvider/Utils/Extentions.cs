@@ -22,9 +22,8 @@ namespace Globus.PositionProvider.Utils
             var arrowsMode = false;
             var knotToKmConstant = 0.0005144;
 
-            for (int i = 0; i < 100000; i++)
+            while (true)
             {
-                //Console.WriteLine($"Aircraft {aircraft.CallSign}; Cycle {i}");
                 Thread.Sleep((int)(sendInterval * 1000));
 
                 var KmPassed = sendInterval * knot * knotToKmConstant;

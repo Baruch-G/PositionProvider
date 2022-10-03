@@ -39,7 +39,7 @@ namespace Globus.PositionProvider.Controllers
         GetAsync(int count)
         {
             while (aircrafts.Count <= count) {
-                var aircraft = new Aircraft { CallSign = $"AIRCRAFT #{aircrafts.Count}", Position = new Position { Latitude = Randomizer.RandomDouble(30,33), Longitude = Randomizer.RandomDouble(34.4,35.6) }, TrueTrack = 0, Altitude = 0 };
+                var aircraft = new Aircraft { CallSign = $"AIRCRAFT #{aircrafts.Count}", Position = new Position { Latitude = Randomizer.RandomDouble(30,33), Longitude = Randomizer.RandomDouble(34.4,35.6) }, TrueTrack = Randomizer.RandomInt(0,360), Altitude = 0 };
                 aircraft.Simulate();
                 _logger.LogDebug($"Simulating {aircraft.CallSign}");
                 aircrafts.Add (aircraft);
