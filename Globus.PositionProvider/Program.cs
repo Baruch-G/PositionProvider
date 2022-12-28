@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Globus.PositionProvider.WebSockets;
+
 
 namespace Globus.PositionProvider
 {
@@ -13,6 +15,7 @@ namespace Globus.PositionProvider
     {
         public static void Main(string[] args)
         {
+            WsServer.InitServer();
             CreateHostBuilder(args).Build().Run();
         }
 

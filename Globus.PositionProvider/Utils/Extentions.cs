@@ -16,8 +16,8 @@ namespace Globus.PositionProvider.Utils
 
         private static void Simulate(Aircraft aircraft, int knot)
         {
-            aircraft.TrueTrack = 0;
-            aircraft.Altitude = 0;
+            // aircraft.TrueTrack = 0;
+            // aircraft.Altitude = 0;
             var sendInterval = 0.1;
             var arrowsMode = false;
             var knotToKmConstant = 0.0005144;
